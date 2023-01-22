@@ -3,6 +3,6 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/5af2ca56d78f3d830cd2/maintainability)](https://codeclimate.com/github/twogog/frontend-project-11/maintainability)
 [![just linter](https://github.com/twogog/frontend-project-11/actions/workflows/linter-check.yml/badge.svg)](https://github.com/twogog/frontend-project-11/actions/workflows/linter-check.yml)
 
-## Setup
+## Demo
 ```
-make install
+https://frontend-project-11-wheat.vercel.app/
