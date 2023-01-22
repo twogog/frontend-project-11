@@ -4,5 +4,4 @@
 [![just linter](https://github.com/twogog/frontend-project-11/actions/workflows/linter-check.yml/badge.svg)](https://github.com/twogog/frontend-project-11/actions/workflows/linter-check.yml)
 
 ## Demo
-```
 [Vercel](https://frontend-project-11-wheat.vercel.app/)
