@@ -1,7 +1,7 @@
 import onChange from 'on-change';
 import * as yup from 'yup';
 
-const renderForm = (elements, state, messageValue) => {
+const renderForm = (elements, state) => {
   const formInput = elements.mainForm.querySelector('input');
   const errorNode = elements.mainForm.parentNode.lastElementChild;
   switch (state.formInput.validation) {
@@ -9,7 +9,7 @@ const renderForm = (elements, state, messageValue) => {
       formInput.classList.add('is-invalid');
       errorNode.classList.add('text-danger');
       errorNode.classList.remove('text-success');
-      errorNode.textContent = messageValue;
+      errorNode.textContent = state.formInput.errors.at(-1);
       break;
     case 'valid':
       formInput.classList.remove('is-invalid');
@@ -27,6 +27,7 @@ export default () => {
   const mainstate = {
     formInput: {
       validation: 'valid',
+      onSubmit: 1,
       addedLinks: [],
       errors: [],
     },
@@ -36,9 +37,9 @@ export default () => {
     mainForm: document.querySelector('.rss-form'),
   };
 
-  const state = onChange(mainstate, (path, value) => {
-    if (path === 'formInput.errors' || path === 'formInput.validation') {
-      renderForm(elements, mainstate, value.at(-1));
+  const state = onChange(mainstate, (path) => {
+    if (path === 'formInput.onSubmit') {
+      renderForm(elements, mainstate);
     }
   });
 
@@ -52,10 +53,12 @@ export default () => {
       .then((result) => {
         state.formInput.validation = 'valid';
         state.formInput.addedLinks.push(result);
+        state.formInput.onSubmit = Math.random();
       })
       .catch((e) => {
         state.formInput.validation = 'invalid';
         state.formInput.errors.push(e.errors[0]);
+        state.formInput.onSubmit = Math.random();
       });
   });
 };
