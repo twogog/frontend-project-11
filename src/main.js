@@ -83,7 +83,7 @@ export default () => {
           .catch((e) => {
             state.formInput.validation = 'invalid';
             state.formInput.addedLinks.pop();
-            const error = (e.message === 'Ошибка сети.') ? e.message : newInstance.t('mainForm.errors.wrongFormat');
+            const error = (e.message.startsWith('NetworkError')) ? 'Ошибка сети' : newInstance.t('mainForm.errors.wrongFormat');
             state.formInput.errors.push(error);
             state.formInput.onSubmit = Math.random();
           });
