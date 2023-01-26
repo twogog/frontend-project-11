@@ -11,6 +11,7 @@ export default () => {
     formInput: {
       validation: 'valid',
       onSubmit: 1,
+      state: 'done',
       addedLinks: [],
       errors: [],
     },
@@ -44,14 +45,21 @@ export default () => {
 
   elements.mainForm.addEventListener('submit', (ev) => {
     ev.preventDefault();
+    const controller = new AbortController();
+    const { signal } = controller;
+    state.formInput.state = 'pending';
     const form = new FormData(ev.target);
     const inputValue = form.get('url');
-
     const schema = yup.string().url(newInstance.t('mainForm.errors.wrongLink')).notOneOf(mainstate.formInput.addedLinks, newInstance.t('mainForm.errors.sameLink'));
     schema.validate(inputValue)
       .then((result) => {
         state.formInput.addedLinks.push(result);
-        parser(mainstate.formInput.addedLinks.at(-1))
+        setTimeout(() => {
+          if (state.formInput.state === 'pending') {
+            controller.abort();
+          }
+        }, 4900);
+        parser(mainstate.formInput.addedLinks.at(-1), signal)
           .then((parsedDoc) => {
             const errorNode = parsedDoc.querySelector('parsererror');
             if (errorNode) {
@@ -75,20 +83,23 @@ export default () => {
                 }
                 return '';
               }).filter((element) => element !== '');
+              state.formInput.state = 'done';
               state.formInput.validation = 'valid';
               state.formInput.onSubmit = Math.random();
               state.postsAndFeeds.posts.push(posts);
             }
           })
           .catch((e) => {
+            state.formInput.state = 'done';
             state.formInput.validation = 'invalid';
             state.formInput.addedLinks.pop();
-            const error = (e.message.startsWith('NetworkError')) ? 'Ошибка сети' : newInstance.t('mainForm.errors.wrongFormat');
+            const error = (e.message.trim().endsWith('aborted.')) ? 'Ошибка сети' : newInstance.t('mainForm.errors.wrongFormat');
             state.formInput.errors.push(error);
             state.formInput.onSubmit = Math.random();
           });
       })
       .catch((e) => {
+        state.formInput.state = 'done';
         state.formInput.validation = 'invalid';
         state.formInput.errors.push(e.errors[0]);
         state.formInput.onSubmit = Math.random();
