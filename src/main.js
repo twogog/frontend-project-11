@@ -58,7 +58,7 @@ export default () => {
           if (state.formInput.state === 'pending') {
             controller.abort();
           }
-        }, 2000);
+        }, 1000);
         parser(mainstate.formInput.addedLinks.at(-1), signal)
           .then((parsedDoc) => {
             const errorNode = parsedDoc.querySelector('parsererror');
