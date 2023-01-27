@@ -40,7 +40,13 @@ export default () => {
     },
   };
 
-  const state = onChange(mainstate, (path) => {
+  const state = onChange(mainstate, (path, value) => {
+    const submitButton = elements.mainForm.querySelector('button');
+    if (value === 'pending') {
+      submitButton.disabled = true;
+    } else if (value === 'done') {
+      submitButton.disabled = false;
+    }
     if (path === 'formInput.onSubmit') {
       renderForm(elements, mainstate, newInstance);
     }
