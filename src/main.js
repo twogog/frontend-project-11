@@ -90,6 +90,7 @@ export default () => {
             }
           })
           .catch((e) => {
+            console.log(e.name);
             state.formInput.state = 'done';
             state.formInput.validation = 'invalid';
             state.formInput.addedLinks.pop();
