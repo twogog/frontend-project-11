@@ -18,6 +18,7 @@ export default () => {
     postsAndFeeds: {
       feeds: [],
       posts: [],
+      visited: [],
     },
   };
 
@@ -32,6 +33,7 @@ export default () => {
     mainForm: document.querySelector('.rss-form'),
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
+    modal: document.querySelector('#modal'),
   };
 
   const state = onChange(mainstate, (path) => {
@@ -39,6 +41,9 @@ export default () => {
       renderForm(elements, mainstate, newInstance);
     }
     if (path === 'postsAndFeeds.posts') {
+      renderPostsaFeeds(elements, mainstate, newInstance);
+    }
+    if (path === 'postsAndFeeds.visited') {
       renderPostsaFeeds(elements, mainstate, newInstance);
     }
   });
@@ -58,7 +63,7 @@ export default () => {
           if (state.formInput.state === 'pending') {
             controller.abort();
           }
-        }, 3000);
+        }, 4500);
         parser(mainstate.formInput.addedLinks.at(-1), signal)
           .then((parsedDoc) => {
             const errorNode = parsedDoc.querySelector('parsererror');
@@ -104,5 +109,13 @@ export default () => {
         state.formInput.errors.push(e.errors[0]);
         state.formInput.onSubmit = Math.random();
       });
+  });
+
+  elements.posts.addEventListener('click', (e) => {
+    if ((/button|a/i).test(e.target.tagName)) {
+      const { visited } = state.postsAndFeeds;
+      const idAttr = e.target.getAttribute('data-id');
+      visited.push(idAttr);
+    }
   });
 };

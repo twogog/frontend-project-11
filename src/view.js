@@ -22,20 +22,16 @@ const renderForm = (elements, state, newInstance) => {
 
 const renderPostsaFeeds = (elements, mainstate) => {
   const { feeds, posts } = elements;
-  const { feedTitleText, descriptionText } = mainstate.postsAndFeeds.feeds.at(-1);
-  if (feeds.innerHTML === '') {
-    feeds.innerHTML = `
+  feeds.innerHTML = `
     <div class="card border-0">
     <div class="card-body"><h2 class="card-title h4">Фиды</h2></div>
       <ul class="list-group border-0 rounded-0">
-      <li class="list-group-item border-0 border-end-0">
-        <h3 class="h6 m-0">${feedTitleText}</h3>
-        <p class="m-0 small text-black-50">${descriptionText}</p>
-      </li>
       </ul>
     </div>
-    `;
-  } else {
+  `;
+
+  mainstate.postsAndFeeds.feeds.forEach((element) => {
+    const { feedTitleText, descriptionText } = element;
     const feedsUL = feeds.querySelector('ul');
     const li = document.createElement('li');
     li.classList.add('list-group-item', 'border-0', 'border-end-0');
@@ -47,7 +43,7 @@ const renderPostsaFeeds = (elements, mainstate) => {
     p.textContent = descriptionText;
     li.append(h3, p);
     feedsUL.insertBefore(li, feedsUL.firstElementChild);
-  }
+  });
 
   posts.innerHTML = `
     <div class="card border-0">
@@ -62,7 +58,8 @@ const renderPostsaFeeds = (elements, mainstate) => {
     });
   };
 
-  mainstate.postsAndFeeds.posts.reverse().forEach((array) => {
+  const reversePosts = mainstate.postsAndFeeds.posts.map((post) => post);
+  reversePosts.reverse().forEach((array) => {
     array.forEach((element) => {
       const { id, postTitleText, linkText } = element;
       // if (mainstate.postsAndFeeds.posts.length > 1) {
@@ -90,6 +87,15 @@ const renderPostsaFeeds = (elements, mainstate) => {
       postsUl.append(li);
     });
   });
+
+  const { visited } = mainstate.postsAndFeeds;
+  if (visited.length > 0) {
+    visited.forEach((id) => {
+      const a = posts.querySelector(`a[data-id='${id}']`);
+      a.classList.remove('fw-bold');
+      a.classList.add('fw-normal', 'link-secondary');
+    });
+  }
 };
 
 export { renderForm, renderPostsaFeeds };
