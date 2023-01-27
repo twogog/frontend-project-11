@@ -90,11 +90,10 @@ export default () => {
             }
           })
           .catch((e) => {
-            console.log(e.message);
             state.formInput.state = 'done';
             state.formInput.validation = 'invalid';
             state.formInput.addedLinks.pop();
-            const error = (e.message.trim().endsWith('aborted.')) ? 'Ошибка сети' : newInstance.t('mainForm.errors.wrongFormat');
+            const error = (e.message.includes('aborted')) ? 'Ошибка сети' : newInstance.t('mainForm.errors.wrongFormat');
             state.formInput.errors.push(error);
             state.formInput.onSubmit = Math.random();
           });
