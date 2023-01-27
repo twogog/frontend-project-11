@@ -61,7 +61,9 @@ const renderPostsaFeeds = (elements, mainstate) => {
   const reversePosts = mainstate.postsAndFeeds.posts.map((post) => post);
   reversePosts.reverse().forEach((array) => {
     array.forEach((element) => {
-      const { id, postTitleText, linkText } = element;
+      const {
+        id, postTitleText, linkText, postDescriptionText,
+      } = element;
       // if (mainstate.postsAndFeeds.posts.length > 1) {
       //   const onMonitorPosts = document.querySelectorAll('a');
       //   if ([...onMonitorPosts].map((link) => link.textContent).includes(postTitleText)) {
@@ -74,7 +76,7 @@ const renderPostsaFeeds = (elements, mainstate) => {
       const link = document.createElement('a');
       link.classList.add('fw-bold');
       setAttributes(link, {
-        href: `${linkText}`, 'data-id': `${id}`, target: '_blank', rel: 'noopener noreferrer',
+        href: `${linkText}`, modalText: `${postDescriptionText}`, 'data-id': `${id}`, target: '_blank', rel: 'noopener noreferrer',
       });
       const button = document.createElement('button');
       button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
@@ -95,6 +97,16 @@ const renderPostsaFeeds = (elements, mainstate) => {
       a.classList.remove('fw-bold');
       a.classList.add('fw-normal', 'link-secondary');
     });
+
+    const targetId = visited.at(-1);
+    const textForModal = posts.querySelector(`a[data-id='${targetId}']`);
+    const modalTitle = textForModal.textContent;
+    const modalDescription = textForModal.getAttribute('modalText');
+    const modalLink = textForModal.getAttribute('href');
+    const { title, description, link } = elements.modal;
+    title.textContent = modalTitle;
+    description.textContent = modalDescription;
+    link.setAttribute('href', modalLink);
   }
 };
 

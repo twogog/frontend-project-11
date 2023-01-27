@@ -33,7 +33,11 @@ export default () => {
     mainForm: document.querySelector('.rss-form'),
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
-    modal: document.querySelector('#modal'),
+    modal: {
+      title: document.querySelector('#modal h5'),
+      description: document.querySelector('#modal .modal-body'),
+      link: document.querySelector('#modal a'),
+    },
   };
 
   const state = onChange(mainstate, (path) => {
