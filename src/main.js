@@ -90,11 +90,10 @@ export default () => {
             }
           })
           .catch((e) => {
-            console.log(e.name);
             state.formInput.state = 'done';
             state.formInput.validation = 'invalid';
             state.formInput.addedLinks.pop();
-            const error = (e.message === ('Ошибка сети') || e.message.includes('aborted') || e.name === ('NetworkError')) ? 'Ошибка сети' : newInstance.t('mainForm.errors.wrongFormat');
+            const error = (e.message !== 'parsererror') ? 'Ошибка сети' : newInstance.t('mainForm.errors.wrongFormat');
             state.formInput.errors.push(error);
             state.formInput.onSubmit = Math.random();
           });
